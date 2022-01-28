@@ -1,0 +1,10 @@
+export { default as Dashboard } from './dashboard/Dashboard';
+export { default as Home } from './dashboard/home/Home';
+export { default as Users } from './dashboard/users/Users';
+export { default as Products } from './dashboard/products/Products';
+export { default as UserProfile } from './dashboard/userprofile/UserProfile';
+export { default as Orders } from './dashboard/orders/Orders';
+export { default as Auth } from './auth/Auth';
+export { default as Login } from './auth/login/Login';
+export { default as Register } from './auth/register/Register';
+export { default as ForgotPassword } from './auth/forgotPassword/ForgotPassword';

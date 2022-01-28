@@ -1,0 +1,10 @@
+.users {
+    background-color: #f4f6f9;
+    flex: 4;
+    padding: 10px 0 10px 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 70px);
+    font-size: 2rem;
+}

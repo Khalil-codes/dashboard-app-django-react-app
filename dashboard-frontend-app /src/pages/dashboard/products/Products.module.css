@@ -1,0 +1,37 @@
+.products {
+    background-color: #f4f6f9;
+    flex: 4;
+    padding: 15px;
+    height: calc(100vh - 70px);
+    overflow-y: auto;
+}
+.utility {
+    text-align: center;
+    margin-bottom: 10px;
+}
+.formControl {
+    text-align: left;
+    margin: 10px 0;
+}
+.formControl label {
+    display: block;
+    font-size: 1.1rem;
+    margin-bottom: 7px;
+}
+.formControl input {
+    width: 100%;
+    padding: 7px;
+    font-size: 1.1rem;
+}
+.formBtns {
+    display: flex;
+    justify-content: space-between;
+}
+.actionBtn {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+.deleteIcon {
+    cursor: pointer;
+}
