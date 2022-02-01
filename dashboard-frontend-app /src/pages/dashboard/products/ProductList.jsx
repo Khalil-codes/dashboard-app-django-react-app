@@ -1,19 +1,20 @@
 import React from 'react';
-import * as api from '../../../api/index';
 import { DataGrid } from '@mui/x-data-grid';
 import { DeleteOutline, EditOutlined } from '@mui/icons-material';
 import styles from './Products.module.css';
 import { useDispatch } from 'react-redux';
 import { useDjango } from '../../../django';
 import { deleteProduct } from '../../../redux/productsSlice';
+import useAxios from '../../../api';
 const ProductList = ({ setSelectedProductToEdit, setFormOpen }) => {
     const products = useDjango();
     const dispatch = useDispatch();
+    const api = useAxios();
 
     const handleDelete = async (id) => {
         try {
-            await api.deleteProduct(id);
-            dispatch(deleteProduct(id));
+            const { status } = await api.delete(`product/${id}/delete`);
+            if (status === 200) dispatch(deleteProduct(id));
         } catch (error) {
             console.log(error, error.message);
         }

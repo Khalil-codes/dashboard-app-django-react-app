@@ -1,7 +1,27 @@
-from api.serializers import ProductSerializer
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
+
 from .models import Product
+from api.serializers import ProductSerializer
+
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+
+        # Add custom claims
+        token['username'] = user.username
+        # ...
+
+        return token
+
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
+
 # Create your views here.
 @api_view(['GET'])
 def getRoutes(request):
@@ -36,8 +56,21 @@ def getRoutes(request):
             'body': None,
             'description': 'Deletes and exiting product'
         },
+        {
+            'Endpoint': '/token',
+            'method': 'POST',
+            'body': {'username': '', 'password': ''},
+            'description': 'Authenticate user'
+        },
+        {
+            'Endpoint': '/token/refresh',
+            'method': 'POST',
+            'body': {'refreshToken': ''},
+            'description': 'Refreshes the AUTH JWT tokens'
+        },
     ]
     return Response(routes)
+
 
 @api_view(['GET'])
 def getProducts(request):

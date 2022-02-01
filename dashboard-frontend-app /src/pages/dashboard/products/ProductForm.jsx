@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { createProduct, updateProduct } from '../../../api';
+import useAxios from '../../../api';
 import Button from '../../../components/Button';
 import Card from '../../../components/Card';
 import { addProduct, editProduct } from '../../../redux/productsSlice';
@@ -11,6 +11,7 @@ const ProductForm = ({
     selectedProductToEdit,
 }) => {
     const dispatch = useDispatch();
+    const api = useAxios();
     const action = selectedProductToEdit ? 'Update' : 'Add';
     const [nameInput, setNameInput] = useState('');
     const [priceInput, setPriceInput] = useState('');
@@ -35,20 +36,24 @@ const ProductForm = ({
                 stock: +stockInput,
             };
             if (selectedProductToEdit) {
-                const { data } = await updateProduct(
-                    selectedProductToEdit.id,
+                const { status, data } = await api.put(
+                    `product/${selectedProductToEdit.id}/update`,
                     dataFields
                 );
-                dispatch(
-                    editProduct({
-                        id: selectedProductToEdit.id,
-                        updatedDataFields: data,
-                    })
-                );
+                if (status === 200)
+                    dispatch(
+                        editProduct({
+                            id: selectedProductToEdit.id,
+                            updatedDataFields: data,
+                        })
+                    );
                 setSelectedProductToEdit(null);
             } else {
-                const { data } = await createProduct(dataFields);
-                dispatch(addProduct(data));
+                const { status, data } = await api.post(
+                    'product/create',
+                    dataFields
+                );
+                if (status === 200) dispatch(addProduct(data));
             }
         }
         setFormOpen(false);

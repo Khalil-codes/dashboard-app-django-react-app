@@ -1,50 +1,41 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Button from '../../../components/Button';
 import { useNavigate, Link } from 'react-router-dom';
-// import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth, signInWithEmailAndPassword } from '../../../firebase';
-import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import jwtDecode from 'jwt-decode';
+import { saveAuthTokens, saveUser } from '../../../redux/authSlice';
+
 const Login = () => {
-    // const auth = getAuth();
-    const [emailInputText, setEmailInputText] = useState('');
+    const dispatch = useDispatch();
+    const [usernameInputText, setUsernameInputText] = useState('');
     const [passwordInputText, setPasswordInputText] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
-    const currentUser = useSelector((state) => state.user.user);
-
-    useEffect(() => {
-        if (currentUser) navigate('/');
-    }, [currentUser]);
 
     const loginHandler = async (e) => {
         e.preventDefault();
-        try {
-            setError('');
-            setLoading(true);
-            await signInWithEmailAndPassword(
-                auth,
-                emailInputText,
-                passwordInputText
-            );
+        setLoading(true);
+        const response = await fetch('http://localhost:8000/api/token/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                username: usernameInputText,
+                password: passwordInputText,
+            }),
+        });
+        const data = await response.json();
+        if (response.status === 200) {
+            dispatch(saveAuthTokens(data));
+            dispatch(saveUser(jwtDecode(data.access)));
+            localStorage.setItem('authTokens', JSON.stringify(data));
             navigate('/');
-        } catch (err) {
-            setError('Incorrect Credentails');
-            setLoading(false);
+        } else {
+            console.log('Something Went Wrong');
         }
     };
-    // const loginHandler = async (e) => {
-    //     e.preventDefault();
-    //     setLoading(true);
-    //     try {
-    //         setError('');
-    //         await login(emailInputText, passwordInputText);
-    //         navigate('/');
-    //     } catch {
-    //         setError('Incorrect Credentials');
-    //         setLoading(false);
-    //     }
-    // };
     return (
         <div className="container">
             <h3>Login User</h3>
@@ -55,12 +46,12 @@ const Login = () => {
             </p>
             <form>
                 <div className="form-control">
-                    <label>Email:</label>
+                    <label>Username:</label>
                     <input
-                        type="email"
+                        type="text"
                         required
-                        placeholder="abc@xyz.com"
-                        onChange={(e) => setEmailInputText(e.target.value)}
+                        placeholder="Enter Username"
+                        onChange={(e) => setUsernameInputText(e.target.value)}
                     />
                 </div>
                 <div className="form-control">

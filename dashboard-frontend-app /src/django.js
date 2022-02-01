@@ -1,13 +1,14 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchAllProducts } from './api';
+import useAxios from './api';
 import { saveProducts } from './redux/productsSlice';
 
 export const useDjango = () => {
     const dispatch = useDispatch();
+    const api = useAxios();
     useEffect(() => {
         const getProducts = async () => {
-            const { data } = await fetchAllProducts();
+            const { data } = await api.get('products');
             console.log(data);
             dispatch(saveProducts(data));
         };
