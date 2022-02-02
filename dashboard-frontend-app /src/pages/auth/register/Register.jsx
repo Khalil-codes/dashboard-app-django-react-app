@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import Button from '../../../components/Button';
-import { auth, createUserWithEmailAndPassword } from '../../../firebase';
-// import { createUserWithEmailAndPassword } from 'firebase/auth';
 
 const Register = () => {
-    // const auth = getAuth();
+    const [firstNameTnputText, setFirstNameInputText] = useState('');
+    const [lastNameInputText, setLastNameInputText] = useState('');
+    const [usernameInputText, setUsernameInputText] = useState('');
     const [emailInputText, setEmailInputText] = useState('');
     const [passwordInputText, setPasswordInputText] = useState('');
     const [confirmPasswordInputText, setConfirmPasswordInputText] =
@@ -19,35 +19,27 @@ const Register = () => {
         if (passwordInputText !== confirmPasswordInputText) {
             return setError("Password Doesn't Match");
         }
-        try {
-            setError('');
-            setLoading(true);
-            await createUserWithEmailAndPassword(
-                auth,
-                emailInputText,
-                passwordInputText
-            );
+        setLoading(true);
+        const response = await fetch('http://localhost:8000/api/user/create/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                username: usernameInputText,
+                password: passwordInputText,
+                email: emailInputText,
+                first_name: firstNameTnputText,
+                last_name: lastNameInputText,
+            }),
+        });
+        if (response.status === 200 || response.status === 201) {
             navigate('/');
-        } catch {
-            setError('Some Error Occured');
+        } else {
+            setError('Some Error Occurred Please Try Again');
             setLoading(false);
         }
     };
-    // const registerHandler = async (e) => {
-    //     e.preventDefault();
-    //     if (passwordInputText !== confirmPasswordInputText) {
-    //         return setError("Password Doesn't Match");
-    //     }
-    //     try {
-    //         setError('');
-    //         setLoading(true);
-    //         await signUp();
-    //         navigate('/');
-    //     } catch {
-    //         setError('Some Error Occured');
-    //         setLoading(false);
-    //     }
-    // };
     return (
         <div className="container">
             <h3>Sign Up</h3>
@@ -57,6 +49,42 @@ const Register = () => {
                 {error}
             </p>
             <form onSubmit={registerHandler}>
+                <div className="form-row">
+                    <div className="form-control">
+                        <label>First Name:</label>
+                        <input
+                            type="text"
+                            required
+                            placeholder="John"
+                            value={firstNameTnputText}
+                            onChange={(e) =>
+                                setFirstNameInputText(e.target.value)
+                            }
+                        />
+                    </div>
+                    <div className="form-control">
+                        <label>Last Name:</label>
+                        <input
+                            type="text"
+                            required
+                            placeholder="Doe"
+                            value={lastNameInputText}
+                            onChange={(e) =>
+                                setLastNameInputText(e.target.value)
+                            }
+                        />
+                    </div>
+                </div>
+                <div className="form-control">
+                    <label>Username:</label>
+                    <input
+                        type="text"
+                        required
+                        placeholder="Enter Username.."
+                        value={usernameInputText}
+                        onChange={(e) => setUsernameInputText(e.target.value)}
+                    />
+                </div>
                 <div className="form-control">
                     <label>Email:</label>
                     <input

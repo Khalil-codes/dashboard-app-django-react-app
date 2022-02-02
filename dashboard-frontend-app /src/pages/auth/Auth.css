@@ -8,7 +8,7 @@
 .auth-container .container {
     display: flex;
     justify-content: center;
-    width: 400px;
+    width: 500px;
     flex-direction: column;
     background: #fff;
     border: 1px solid #ccc;
@@ -26,6 +26,14 @@
 }
 .auth-container .container small {
     color: #616161;
+}
+.form-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.form-row .form-control {
+    width: 48%;
 }
 .form-control {
     margin: 10px 0;

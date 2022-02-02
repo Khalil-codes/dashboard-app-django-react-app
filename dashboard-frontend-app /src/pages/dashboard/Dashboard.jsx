@@ -1,16 +1,11 @@
 import React from 'react';
 import './Dashboard.css';
-import { Navigate, Outlet } from 'react-router-dom';
-// import { useSelector } from 'react-redux';
+import { Outlet } from 'react-router-dom';
 import TopBar from './topbar/TopBar';
 import SideBar from './sidebar/SideBar';
-// import { useAuth } from '../../firebase';
-import { useSelector } from 'react-redux';
 
 const Dashboard = () => {
-    const currentUser = useSelector((state) => state.user.user);
-    // const currentUser = selectUser();
-    return currentUser ? (
+    return (
         <>
             <TopBar />
             <div className="container">
@@ -18,8 +13,6 @@ const Dashboard = () => {
                 <Outlet />
             </div>
         </>
-    ) : (
-        <Navigate to="/auth/login" replace />
     );
 };
 

@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import Button from '../../../components/Button';
 import { Link } from 'react-router-dom';
-// import { sendPasswordResetEmail } from 'firebase/auth';
-import { auth, sendPasswordResetEmail } from '../../../firebase';
+// import { auth, sendPasswordResetEmail } from '../../../firebase';
 
 const ForgotPassword = () => {
     const [emailInputText, setEmailInputText] = useState('');
@@ -14,24 +13,24 @@ const ForgotPassword = () => {
 
     const forgotPasswordHandler = async (e) => {
         e.preventDefault();
-        try {
-            setMessage({
-                msg: '',
-                msgType: '',
-            });
-            setLoading(true);
-            await sendPasswordResetEmail(auth, emailInputText);
-            setMessage({
-                msg: 'Password Sent to your email',
-                msgType: 'success',
-            });
-        } catch (err) {
-            setMessage({
-                msg: 'Email Not found',
-                msgType: 'danger',
-            });
-            setLoading(false);
-        }
+        // try {
+        //     setMessage({
+        //         msg: '',
+        //         msgType: '',
+        //     });
+        //     setLoading(true);
+        //     await sendPasswordResetEmail(auth, emailInputText);
+        //     setMessage({
+        //         msg: 'Password Sent to your email',
+        //         msgType: 'success',
+        //     });
+        // } catch (err) {
+        //     setMessage({
+        //         msg: 'Email Not found',
+        //         msgType: 'danger',
+        //     });
+        //     setLoading(false);
+        // }
     };
     return (
         <div className="container">

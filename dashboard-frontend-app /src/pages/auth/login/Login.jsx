@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Button from '../../../components/Button';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import jwtDecode from 'jwt-decode';
 import { saveAuthTokens, saveUser } from '../../../redux/authSlice';
@@ -11,7 +11,6 @@ const Login = () => {
     const [passwordInputText, setPasswordInputText] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
-    const navigate = useNavigate();
 
     const loginHandler = async (e) => {
         e.preventDefault();
@@ -31,9 +30,9 @@ const Login = () => {
             dispatch(saveAuthTokens(data));
             dispatch(saveUser(jwtDecode(data.access)));
             localStorage.setItem('authTokens', JSON.stringify(data));
-            navigate('/');
         } else {
-            console.log('Something Went Wrong');
+            setError('Incorrect Credentials');
+            setLoading(false);
         }
     };
     return (
